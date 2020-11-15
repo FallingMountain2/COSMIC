@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<html>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+	<script src="break_infinity.js"></script>
+	<script src="ad-notations.umd.js"></script>
+	<script type="text/javascript" src="game.js"></script>
+	<center>
+	<head class="header">
+	
+	<h2>ƞ<span id="money">0</span></h2>
+		<h2 id="alphaDisplay" style="display:none">α<span id="alphaShards">0</span></h2>
+		</head>
+		
+		<span id="tabButtons"><button onclick="tab('mainUI')"id="mainUIButton" class="mainColors">ƞ</button>
+		<button id="alphaticButton" class="alphaTab" onclick="tab('alphatic')">α</button><br>
+		<br>
+		<span id="mainUI" class="tab">
+		<button class="launchButton" onclick="rocketLaunch();"><h2>Advance forwards one week</h2></button>
+	
+	<table id="rockets"><tr>
+		
+		<th>Basic Rocket</th>
+		<tr><td>
+		
+		Fuel: <span id="normalRocketFuel">100</span>/<span id="normalRocketMaxFuel">100</span><br>
+		Height: <span id="normalRocketHeight">0</span> m.<br>
+		<span id="normalRocketSpeed"></span>
+		<span id="normalRocketRate"></span>
+		<button id="normalRocketUpButton" class="upgradeNo" onclick="upgrade(1)"> Upgrade your rocket. Cost: ƞ<span id="normalRocketUpgrade">50</span></button>
+		<br><span id="classInfo1">
+		Worker: <span id="classInfo2"></span><br>
+		Level <span id="classInfo3"></span> EXP)<br>
+		Boosts: <span id="classInfo4"></span><br>
+		</span>
+		<br><span id="chooseWork0" class="workChoose">Choose a Worker!</span><br>
+		<button id="chooseWork1" class="workChoose alterUpYes" onclick="game.workers.rocket1x1 = new worker(1, 0, new Decimal(0), 5, 1);">Engineer: Easy difficulty. More money, but less automation.</button><br>
+		<button id="chooseWork2" class="workChoose alterUpYes" onclick="game.workers.rocket1x1 = new worker(2, 0, new Decimal(0), 5, 1);">Scientist: Medium difficulty. Less upfront money, and slower but more rewarding launches.</button>
+		
+		</td>
+
+		</tr>
+		</table>
+		</span>
+		<span id="alphatic" class="tab">
+			<button id="alphaResetButton" class="alphaLarge" onclick="alphaReset()">Get to 1e10 ƞeta to perform an αlpha reset.</button><br>
+			<span id="alphaBonus"></span>
+		
+		
+		
+		
+		</span>
+	</center>
+	<script>
+function tab(t) {
+	var classList = document.getElementsByClassName("tab");
+	for(var i = 0; i < classList.length; i++) {
+		classList[i].style.display = "none"
+	}
+		document.getElementById(t).style.display = ""
+	}
+tab("mainUI")
+</script>
+</html>
