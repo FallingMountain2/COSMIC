@@ -165,6 +165,113 @@ function alphaReset() {
 	}
 }
 
+
+
+
+//Saving, loading, and exporting. I stole some code from Superspruce for this.
+function objectToDecimal(object) {
+    for (let i in object) {
+        if (typeof(object[i]) == "string" && new Decimal(object[i]) instanceof Decimal && !(new Decimal(object[i]).sign == 0 && object[i] != "0")) {
+          object[i] = new Decimal(object[i]);
+        }
+        if (typeof(object[i]) == "object") {
+            objectToDecimal(object[i]);
+        }
+    }
+}
+function merge(base, source) {
+    for (let i in base) {
+        if (source[i] != undefined) {
+            if (typeof(base[i]) == "object" && typeof(source[i]) == "object" && !isDecimal(base[i]) && !isDecimal(source[i])) {
+                merge(base[i], source[i]);
+            } else {
+                if (isDecimal(base[i]) && !isDecimal(source[i])) {
+                    base[i] = new Decimal(source[i]);
+                } else if (!isDecimal(base[i]) && isDecimal(source[i])) {
+                    base[i] = source[i].toNumber();
+                } else {
+                    base[i] = source[i];
+                }
+            }
+        }
+    }
+}
+function isDecimal(x) {
+    if (x.array != undefined && x.plus != undefined) {
+        return true;
+    } else {
+        return false;
+    }
+}
+var savegame;
+function save() {
+  localStorage.setItem("cosmicI", JSON.stringify(game));
+}
+
+function load() {
+  if (localStorage.getItem("cosmicI")) {
+    savegame = JSON.parse(localStorage.getItem("cosmicI"));
+    objectToDecimal(savegame);
+    merge(game, savegame);
+  }
+}
+function wipeSave() {
+  hardReset();
+  save();
+  load();
+}
+function hardReset() {
+	game = {
+	money: new Decimal(0),
+	rockets:{
+		normal: new rocket(false, new Decimal(50), new Decimal(50), new Decimal(1), new Decimal(0.1), new Decimal(10), false, 0, new Decimal(50), 1.5, 0, 1),
+		research:{
+			active:false,
+			fuel:10,
+			maxFuel:10,
+			speed:1,
+			exchangeRate:0.3,
+			coolDown:10,
+			upgrade:0,
+			cost:10000,
+		}
+	},
+	alpha:{
+		resets:0,
+		shards: new Decimal(0),
+		alphonium: new Decimal(0),
+		upgrades:[],
+		
+		
+	},
+	workers:{
+		rocket1x1:"default"
+		
+	},
+	totalMoney:new Decimal(0),
+	expGain:new Decimal(1),
+}
+}
+function xport() {
+	var tempInput = document.createElement("input");
+	tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+	tempInput.value = btoa(JSON.stringify(game));
+	document.body.appendChild(tempInput);
+	tempInput.select();
+	document.execCommand("copy"); 
+	document.body.removeChild(tempInput); 
+	alert("Save copied to clipboard"); 
+}
+function mport() {
+	var imp = prompt("Enter save file here");
+	if(imp==null) alert("That's not a valid save file.");
+	savegame = JSON.parse(atob(imp));
+	objectToDecimal(savegame)
+	merge(game, savegame);
+	save();
+}
+load();
+window.setInterval(save(), 10000);
 //The main game loop
 window.setInterval(function() {
 	//Altways initialize, every tick, just because of ExP changes

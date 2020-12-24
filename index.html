@@ -13,10 +13,11 @@
 		</head>
 		
 		<span id="tabButtons"><button onclick="tab('mainUI')"id="mainUIButton" class="mainColors">ƞ</button>
-		<button id="alphaticButton" class="alphaTab" onclick="tab('alphatic')">α</button><br>
+		<button id="alphaticButton" class="alphaTab" onclick="tab('alphatic')">α</button>
+		<button id="settingButton" class="mainColors" id="settingsButton" onclick="tab('settings')">s</button><br>
 		<br>
 		<span id="mainUI" class="tab">
-		<button class="launchButton" onclick="rocketLaunch();"><h2>Advance forwards one week</h2></button>
+		<button class="launchButton" onclick="rocketLaunch();"><h2>Launch Rocket</h2></button>
 	
 	<table id="rockets"><tr>
 		
@@ -47,9 +48,11 @@
 			<span id="alphaBonus"></span>
 		
 		
-		
-		
 		</span>
+		<span id="settings" class="tab">
+		<button id="save" class="upgradeYes" onclick="save()">Save the game</button><br>
+		<button id="export" class="upgradeYes" onclick="xport()">Export a save file</button><br>
+		<button id="import" class="upgradeYes" onclick="mport()">Import a save file</button><br>
 	</center>
 	<script>
 function tab(t) {
