@@ -17,10 +17,16 @@ class rocket {
 	}
 	//Launches a rocket.
 	launch() {
+		
 		if (this.active == false && this.coolDownActive == false) {
 			this.launchesLeft = this.totalLaunches;
 			this.active = true;
+		} else if (this.active == true && this.coolDownActive == false) {
+			this.active = false;
+			this.coolDownActive = true;
+			this.launchesLeft = 0;
 		}
+		
 	}
 	//Finds the height of a rocket.
 	getHeight() {
@@ -95,14 +101,20 @@ var game = {
 	},
 	alpha:{
 		resets:0,
+		resets:0,
 		shards: new Decimal(0),
 		alphonium: new Decimal(0),
-		upgrades:[],
+		upgrades: {
+			a11:false,
+			a12:false,
+			a13:false,
+		},
+		totalAlphonium: new Decimal(0),
 		
 		
 	},
 	workers:{
-		rocket1x1:"default"
+		rocket1x1: new worker(0,0, new Decimal(0), 0, 1),
 		
 	},
 	totalMoney:new Decimal(0),
@@ -125,49 +137,99 @@ function upgrade(rocket) {
 	if (rocket === 1 && game.money.gte(game.rockets.normal.cost) && game.rockets.normal.active == false) {
 		game.money = game.money.minus(game.rockets.normal.cost);
 		game.rockets.normal.upgrade++;
-		game.rockets.normal.fuel = game.rockets.normal.maxFuel;
 	}
 	initUpgrades();
+	game.rockets.normal.fuel = game.rockets.normal.maxFuel;
 }
 //Initializes the upgrades.
 function initUpgrades() {
-	//Init speed upgrades
-	game.rockets.normal.speed = new Decimal(1).plus(new Decimal(2).plus(game.rockets.normal.upgrade).div(3).floor().div(1.5));
-	if(game.workers.rocket1x1.type == 1) {
-		game.rockets.normal.speed = game.rockets.normal.speed.times(new Decimal(1.2).pow(game.workers.rocket1x1.level));
-	}
-	//Init maxFuel upgrades
-	game.rockets.normal.maxFuel = new Decimal(50).plus(Decimal.min(new Decimal(1).plus(game.rockets.normal.upgrade).div(4).floor().times(15),100));
-	game.rockets.normal.maxFuel = new Decimal(game.rockets.normal.maxFuel).times(new Decimal(1.10).pow(game.rockets.normal.totalLaunches - game.rockets.normal.totalLaunches));
-	//Init exchangeRate upgrades
-	game.rockets.normal.exchangeRate = new Decimal(0.1).plus(new Decimal(1).plus(game.rockets.normal.upgrade).div(3).floor().times(0.15));
-	game.rockets.normal.exchangeRate = game.rockets.normal.exchangeRate.times(game.alpha.shards.pow(2).plus(1));
-	//Init heightExponent upgrades
-	game.rockets.normal.heightExponent = new Decimal(1).plus(Math.floor(game.rockets.normal.upgrade/5)*0.1)
-	//Init ExP gained
-	game.expGain = new Decimal(1).times(game.alpha.shards.pow(1/3).plus(1))
-	game.expGain = game.expGain.times(new Decimal(1).plus(Decimal.max(1, new Decimal(game.rockets.normal.upgrade - 20).div(4).floor())));
-	//Init cooldown upgrades
+	initSpeed();
+	initFuel();
+	initExchangeRate();
+	initHeightExponent();
+	initExpGain();
 	if (game.rockets.normal.upgrade > 5) {
 		game.rockets.normal.coolDown = 20
 	}
 
 }
+//Initialize speed
+function initSpeed() {
+	game.rockets.normal.speed = new Decimal(1).plus(new Decimal(2).plus(game.rockets.normal.upgrade).div(3).floor().div(1.5));
+	if(game.workers.rocket1x1.type == 1) {
+		game.rockets.normal.speed = game.rockets.normal.speed.times(new Decimal(1.2).pow(game.workers.rocket1x1.level));
+	}
+	if (game.alpha.upgrades.a13 == true) game.rockets.normal.speed = game.rockets.normal.speed.times(new Decimal(game.alpha.resets).pow(1.7).div(10).plus(1))
+	if (game.alpha.totalAlphonium.gte(0)) game.rockets.normal.speed = game.rockets.normal.speed.times(Decimal.pow(1.5, game.alpha.totalAlphonium))
+}
+//Init Fuel
+function initFuel() {
+	game.rockets.normal.maxFuel = new Decimal(50).plus(Decimal.min(new Decimal(1).plus(game.rockets.normal.upgrade).div(4).floor().times(15),100));
+	game.rockets.normal.maxFuel = new Decimal(game.rockets.normal.maxFuel).times(new Decimal(1.10).pow(game.rockets.normal.totalLaunches - game.rockets.normal.totalLaunches));
+}
+//Init Exchange Rate
+function initExchangeRate() {
+	game.rockets.normal.exchangeRate = new Decimal(0.1).plus(new Decimal(1).plus(game.rockets.normal.upgrade).div(3).floor().times(0.15));
+	game.rockets.normal.exchangeRate = game.rockets.normal.exchangeRate.times(game.alpha.shards.pow(1.4).plus(1));
+	if (game.alpha.upgrades.a12 == true) game.rockets.normal.exchangeRate = game.rockets.normal.exchangeRate.times(game.alpha.shards.times(game.alpha.resets).div(10).pow(0.4).plus(1));
+	if (game.alpha.upgrades.a13 == true) game.rockets.normal.exchangeRate = game.rockets.normal.exchangeRate.times(new Decimal(game.alpha.resets).pow(1.7).div(10).plus(1))
+}
+//Init Height Exponent
+function initHeightExponent() {
+	game.rockets.normal.heightExponent = new Decimal(1).plus(Decimal.min(Math.floor(game.rockets.normal.upgrade/5)*0.075, 1))
+	game.rockets.normal.heightExponent = game.rockets.normal.heightExponent.plus(Decimal.min(Decimal.floor(Decimal.max(game.rockets.normal.upgrade - 50, 0)/5)/20, game.alpha.totalAlphonium.div(4)))
+}
+//Init Exp Gain
+function initExpGain() {
+	game.expGain = new Decimal(1).times(game.alpha.shards.pow(1/3).plus(1))
+	if (game.alpha.upgrades.a12 == true) game.expGain = game.expGain.times(new Decimal(1).times(game.alpha.shards.times(game.alpha.resets).div(10).pow(0.4).plus(1)))
+	game.expGain = game.expGain.times(new Decimal(1).plus(Decimal.max(1, new Decimal(game.rockets.normal.upgrade - 20).div(4).floor())));
+	if (game.alpha.upgrades.a11 == true) game.expGain = game.expGain.times(new Decimal(game.alpha.resets).pow(1.4).div(10).plus(1));
+}
 //The first reset tier! Alphatic Reset.
 function alphaReset() {
 	if (game.money.gte("1e10")) {
 		game.alpha.resets += 1
-		game.alpha.shards = game.alpha.shards.plus(game.money.pow(1/10).times(game.workers.rocket1x1.level/10));
+		game.alpha.shards = game.alpha.shards.plus(game.money.pow(1/10).times(0.1+game.workers.rocket1x1.level/10));
 		game.money = new Decimal(0);
 		game.rockets.normal =  new rocket(false, new Decimal(50), new Decimal(50), new Decimal(1), new Decimal(0.1), new Decimal(10), false, 0, new Decimal(50), 1.5, 0, 1),
 		game.workers.rocket1x1.level = 0;
 		game.workers.rocket1x1.exp = new Decimal(0);
 	}
 }
-
-
-
-
+//Alphatic Shards convert into Alphonium.
+function alphoniumPurchase() {
+	if (game.alpha.shards.gte(new Decimal(250).times(new Decimal(5).pow(game.alpha.totalAlphonium)))) {
+		
+		game.alpha.shards = game.alpha.shards.minus(new Decimal(250).times(new Decimal(5).pow(game.alpha.totalAlphonium)));
+		game.alpha.alphonium = game.alpha.alphonium.plus(1);
+		game.alpha.totalAlphonium = game.alpha.totalAlphonium.plus(1);
+	}
+}
+//It wouldn't be an incremental without tons of upgrades.
+//Also my old upgrade code is broken for some reason, so we're going to be inefficient.
+function alphaUpgrade(row, column) {
+	switch(row) {
+		//row 1
+		case 1:
+		if (game.alpha.alphonium.gte(1)) {
+		switch(column) {
+			case 1:
+			if (game.alpha.upgrades.a11 == false) game.alpha.upgrades.a11 = true;
+			break
+			case 2:
+			if (game.alpha.upgrades.a12 == false) game.alpha.upgrades.a12 = true;
+			break
+			case 3:
+			if (game.alpha.upgrades.a13 == false) game.alpha.upgrades.a13 = true;
+			break
+		}
+		game.alpha.alphonium = game.alpha.alphonium.minus(1);
+		}
+		break
+		
+	}
+}
 //Saving, loading, and exporting. I stole some code from Superspruce for this.
 function objectToDecimal(object) {
     for (let i in object) {
@@ -207,12 +269,12 @@ var savegame;
 function save() {
   localStorage.setItem("cosmicI", JSON.stringify(game));
 }
-
 function load() {
-  if (localStorage.getItem("cosmicI")) {
+	if (localStorage.getItem("cosmicI")) {
     savegame = JSON.parse(localStorage.getItem("cosmicI"));
     objectToDecimal(savegame);
     merge(game, savegame);
+
   }
 }
 function wipeSave() {
@@ -240,7 +302,12 @@ function hardReset() {
 		resets:0,
 		shards: new Decimal(0),
 		alphonium: new Decimal(0),
-		upgrades:[],
+		totalAlphonium: new Decimal(0),
+		upgrades: {
+			a11:false,
+			a12:false,
+			a13:false,
+		}
 		
 		
 	},
@@ -271,7 +338,7 @@ function mport() {
 	save();
 }
 load();
-window.setInterval(save(), 10000);
+window.setInterval(function() {save()}, 10000);
 //The main game loop
 window.setInterval(function() {
 	//Altways initialize, every tick, just because of ExP changes
@@ -285,7 +352,7 @@ window.setInterval(function() {
 		ge("normalRocketUpButton").className = "upgradeYes"
 	} else ge("normalRocketUpButton").className = "upgradeNo";
 	//Upgrades also need a cost.
-	game.rockets.normal.cost = new Decimal(1.8).pow(game.rockets.normal.upgrade).pow(0.7).times(50);
+	game.rockets.normal.cost = new Decimal(1.509).pow(game.rockets.normal.upgrade).times(50);
 	//Displaying current money and Tech Points.
 	ge("money").innerHTML = scientific.format(game.money, 2, 2);
 	//Stats for the normal rocket.
@@ -301,7 +368,7 @@ window.setInterval(function() {
 		ge("normalRocketRate").innerHTML = "Exchange rate: "+scientific.format(game.rockets.normal.exchangeRate, 2, 2)+" ƞ/m.<br>"
 	}
 	//Class detection and your first Crew Member.
-	if(!game.workers.rocket1x1.type && game.totalMoney.gte("1e7")) {
+	if(game.workers.rocket1x1.type == 0 && game.totalMoney.gte("1e6")) {
 		ge("chooseWork0").style.display = ""
 		ge("chooseWork1").style.display = ""
 		ge("chooseWork2").style.display = ""
@@ -321,12 +388,37 @@ window.setInterval(function() {
 	//Showing stuff post- and during Alphatic resets.
 	if (game.money.lt("1e10")) {
 		ge("alphaResetButton").innerHTML = "Get to 1e10 ƞeta to perform an αlpha reset."
-	} else ge("alphaResetButton").innerHTML = "Reset your ƞeta, level, and rocket and gain " + scientific.format(game.money.pow(1/10).times(game.workers.rocket1x1.level/10),2 ,2) + " αlphonium shards";
+	} else ge("alphaResetButton").innerHTML = "Reset your ƞeta, level, and rocket and gain " + scientific.format(game.money.pow(1/10).times(0.1+game.workers.rocket1x1.level/10),2 ,2) + " αlphonium shards";
 	if (game.alpha.resets > 0) {
 		ge("alphaDisplay").style.display = "";
 		ge("alphaShards").innerHTML = scientific.format(game.alpha.shards, 2, 2)
-		ge("alphaBonus").innerHTML = "Your " + scientific.format(game.alpha.shards, 2, 2) + " alphatic shards give a " + scientific.format(game.alpha.shards.pow(2).plus(1), 2, 2) + "x bonus to neta gain and a " + scientific.format(game.alpha.shards.pow(1/3).plus(1)) + "x bonus to exp gain."
+		ge("alphonium").innerHTML = scientific.format(game.alpha.alphonium, 2, 2)
+		ge("alphaBonus").innerHTML = "Your " + scientific.format(game.alpha.shards, 2, 2) + " alphatic shards give a " + scientific.format(game.alpha.shards.pow(1.4).plus(1), 2, 2) + "x bonus to neta gain and a " + scientific.format(game.alpha.shards.pow(1/3).plus(1)) + "x bonus to exp gain."
+		ge("alphoniumConversion").style.display = "";
+		if (game.alpha.shards.gte(new Decimal(250).times(new Decimal(5).pow(game.alpha.totalAlphonium)))){
+			ge("alphoniumConversion").className = "alphaMiniUpYes";
+		} else ge("alphoniumConversion").className = "upgradeNo";
+		ge("alphoniumCost").innerHTML = scientific.format(new Decimal(250).times(new Decimal(5).pow(game.alpha.totalAlphonium)), 2, 2);
 	}
-	
+	//Alphonium upgrades are hidden until you get 1 Alphonium.
+	if (game.alpha.alphonium.gte(1) || game.alpha.upgrades.a11 == true || game.alpha.upgrades.a12 == true || game.alpha.upgrades.a13 == true) {
+	ge("alphoniumBonus").innerHTML = "Smelting " + scientific.format(game.alpha.totalAlphonium, 2, 2) + " Alphonium adds +" + scientific.format(game.alpha.totalAlphonium.div(4),2,2) + " to your Height Exponent cap. <br>"
+		ge("alphaRow1").style.display = "";
+		ge("a11Bonus").innerHTML = scientific.format(new Decimal(game.alpha.resets).pow(1.4).div(10).plus(1), 2, 2);
+		ge("a12Bonus").innerHTML = scientific.format(new Decimal(game.alpha.resets).div(10).pow(0.4).plus(1), 2, 2);
+		ge("a13Bonus").innerHTML = scientific.format(new Decimal(game.alpha.resets).pow(1.7).div(10).plus(1), 2, 2);
+	}
+	if (game.alpha.alphonium.gte(1)) {
+		ge("a11").className = "alphaUpYes"
+		ge("a12").className = "alphaUpYes"
+		ge("a13").className = "alphaUpYes"
+	} else {
+		ge("a11").className = "alphaUpNo"
+		ge("a12").className = "alphaUpNo"
+		ge("a13").className = "alphaUpNo"
+	}
+	if (game.alpha.upgrades.a11 == true) ge("a11").className = "alphaUpBought"
+	if (game.alpha.upgrades.a12 == true) ge("a12").className = "alphaUpBought"
+	if (game.alpha.upgrades.a13 == true) ge("a13").className = "alphaUpBought"
 	
 }, 33);

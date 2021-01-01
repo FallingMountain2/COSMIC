@@ -85,3 +85,57 @@ background: #6837ff
 color: #82fffc;
 background: #6837ff
 }
+.alphaUpNo {
+	background:#444444;
+	color:#000000;
+	border: 2px solid #888888;
+	width: 180px;
+	height: 90px;
+}
+.alphaUpYes {
+	color: #6837ff;
+    background: #82fffc;
+	font-weight: bold;
+    border: 2px solid #6837ff;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	width: 180px;
+	height: 90px;
+}
+.alphaUpYes:hover {
+	border: 2px solid #00ffff;
+	color: #82fffc;
+	background: #6837ff;
+	width: 200px;
+	height:100px;
+}
+.alphaMiniUpYes {
+	color: #6837ff;
+    background: #82fffc;
+	font-weight: bold;
+    border: 2px solid #6837ff;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	width: 150px;
+	height: 60px;
+}
+.alphaMiniUpYes:hover {
+	border: 2px solid #00ffff;
+color: #82fffc;
+background: #6837ff
+}
+.alphaUpBought {
+	color: #6837ff;
+    background: #82fffc;
+	font-weight: bold;
+    border: 2px solid #6837ff;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	width: 200px;
+	height: 100px;
+}
+.alphaUpBought:hover {
+	border: 2px solid #00ffff;
+	color: #82fffc;
+	background: #6837ff;
+}
