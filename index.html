@@ -9,7 +9,7 @@
 	<head class="header">
 	
 	<h2>ƞ<span id="money">0</span></h2>
-		<h2 id="alphaDisplay" style="display:none">α<span id="alphaShards">0</span></h2>
+		<h2 id="alphaDisplay" style="display:none">α<span id="alphaShards">0</span>(+<span id="alphonium">0</span>)</h2>
 		</head>
 		
 		<span id="tabButtons"><button onclick="tab('mainUI')"id="mainUIButton" class="mainColors">ƞ</button>
@@ -23,7 +23,7 @@
 		
 		<th>Basic Rocket</th>
 		<tr><td>
-		
+		<center>
 		Fuel: <span id="normalRocketFuel">100</span>/<span id="normalRocketMaxFuel">100</span><br>
 		Height: <span id="normalRocketHeight">0</span> m.<br>
 		<span id="normalRocketSpeed"></span>
@@ -37,18 +37,28 @@
 		<br><span id="chooseWork0" class="workChoose">Choose a Worker!</span><br>
 		<button id="chooseWork1" class="workChoose alterUpYes" onclick="game.workers.rocket1x1 = new worker(1, 0, new Decimal(0), 5, 1);">Engineer: Easy difficulty. More money, but less automation.</button><br>
 		<button id="chooseWork2" class="workChoose alterUpYes" onclick="game.workers.rocket1x1 = new worker(2, 0, new Decimal(0), 5, 1);">Scientist: Medium difficulty. Less upfront money, and slower but more rewarding launches.</button>
-		
+		</center>
 		</td>
 
 		</tr>
 		</table>
 		</span>
+		
+		
 		<span id="alphatic" class="tab">
 			<button id="alphaResetButton" class="alphaLarge" onclick="alphaReset()">Get to 1e10 ƞeta to perform an αlpha reset.</button><br>
-			<span id="alphaBonus"></span>
-		
-		
+			<span id="alphaBonus"></span> <br>
+			<span id="alphoniumBonus"></span>
+			<button style="display:none" id="alphoniumConversion" class="upgradeNo" onclick="alphoniumPurchase()">Smelt αlphonium from shards. Cost: α<span id="alphoniumCost"></span></button>
+			<br>
+			<table id="alphaTable"><tr id="alphaRow1" style="display:none"><td>
+			<button id="a11" class="alphaUpNo" onclick="alphaUpgrade(1,1)">Increase XP gain based on Alpha resets. Currently:<span id="a11Bonus">1</span>x. Cost: 1 αlphonium</button></td><td>
+			<button id="a12" class="alphaUpNo" onclick="alphaUpgrade(1,2)">Increase Alphonium Shard bonus based on Alpha resets. Currently:<span id="a12Bonus">1</span>x. Cost: 1 αlphonium</button></td><td>
+			<button id="a13" class="alphaUpNo" onclick="alphaUpgrade(1,3)">Increase speed and exchange rate based on Alpha resets. Currently:<span id="a13Bonus">1</span>x. Cost: 1 αlphonium</button></td></tr>
+			</table>
 		</span>
+		
+		
 		<span id="settings" class="tab">
 		<button id="save" class="upgradeYes" onclick="save()">Save the game</button><br>
 		<button id="export" class="upgradeYes" onclick="xport()">Export a save file</button><br>
