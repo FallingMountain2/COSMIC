@@ -20,7 +20,7 @@ html {
     border: 2px solid #00FF7E;
 	cursor: pointer;
 	width:150px;
-	height:60px;
+	height:80px;
 }
 .alterUpYes {
 	color: #00FF7E;
@@ -28,8 +28,8 @@ html {
 	font-weight: bold;
     border: 2px solid #00FF7E;
 	cursor: pointer;
-	width:180px;
-	height:120px;
+	width:250px;
+	height:200px;
 }
 .mainColors {
 color: #00FF7E;
@@ -43,7 +43,7 @@ color: #00FF7E;
   color:#000000;
   border: 2px solid #888888;
   width: 150px;
-  height: 60px;
+  height: 80px;
 }
 .launchButton {
 	color: #00FF7E;
@@ -89,7 +89,7 @@ background: #6837ff
 	background:#444444;
 	color:#000000;
 	border: 2px solid #888888;
-	width: 180px;
+	width: 150px;
 	height: 90px;
 }
 .alphaUpYes {
@@ -99,43 +99,57 @@ background: #6837ff
     border: 2px solid #6837ff;
 	transition-duration: 0.4s;
 	cursor: pointer;
-	width: 180px;
-	height: 90px;
+	width: 150px;
+	height: 80px;
 }
 .alphaUpYes:hover {
 	border: 2px solid #00ffff;
 	color: #82fffc;
 	background: #6837ff;
-	width: 200px;
-	height:100px;
 }
-.alphaMiniUpYes {
+.miniAlphaYes {
+	width:32px;
+	height:32px;
 	color: #6837ff;
     background: #82fffc;
 	font-weight: bold;
     border: 2px solid #6837ff;
 	transition-duration: 0.4s;
 	cursor: pointer;
-	width: 150px;
-	height: 60px;
 }
-.alphaMiniUpYes:hover {
-	border: 2px solid #00ffff;
-color: #82fffc;
-background: #6837ff
-}
-.alphaUpBought {
-	color: #6837ff;
-    background: #82fffc;
-	font-weight: bold;
-    border: 2px solid #6837ff;
-	transition-duration: 0.4s;
-	cursor: pointer;
-	width: 200px;
-	height: 100px;
-}
-.alphaUpBought:hover {
-	border: 2px solid #00ffff;
+.miniAlphaYes.hover {
 	color: #82fffc;
 	background: #6837ff;
+}
+.miniAlphaNo {
+	width:30px;
+	height:30px;
+	color:#888888;
+	background:#444444;
+}
+.miniAlphaBought {
+	width:30px;
+	height:30px;
+	color: #82fffc;
+    background: #6837ff;
+	font-weight: bold;
+    border: 2px solid #82fffc;
+	cursor: pointer;
+}
+.beta {
+	color: #7f3f00;
+	text-shadow: 0 0 3px transparent, 0 0 6px #ffdf7f;
+	background: radial-gradient(#ffbf00, #ff7f00);
+	background-size: 300% 300%;
+	background-position: 100% 100%;
+	border: 2px solid #ffbf00;
+	font-weight: bold;
+	transition-duration: 0.3s;
+	cursor: pointer;
+}
+.beta:hover {
+	box-shadow: inset 0px 0px 24px 0px #ffaf00;
+	border-color: #ff9000;
+	color: #ffbf1f;
+	text-shadow: 0 0 3px #d09000, 0 0 6px #d09000;
 }
