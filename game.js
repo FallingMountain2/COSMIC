@@ -153,6 +153,7 @@ function initExchangeRate() {
 	//Multipliers
 	game.rocket.exchangeRate = Decimal.add(250, Decimal.mul(75, game.rocket.upgrade[0]));
 	game.rocket.exchangeRate = game.rocket.exchangeRate.times(Decimal.pow(1.3, game.rocket.upgrade[0]));
+	if (getHeight().gte(2)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(2).pow(1.5));
 	if (game.rocket.maxFuel.gte(100)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(10);
 }
 //Init Height Exponent
