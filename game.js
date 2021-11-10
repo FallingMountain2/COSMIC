@@ -61,8 +61,8 @@ function rocketLaunch() {
 //Getting the rocket's current height.
 function getHeight() {
 	var height = game.rocket.maxFuel.sub(game.rocket.fuel).times(game.rocket.speed);
-	if (height.gte(1)) height = height.minus(2).times(10).pow(3/4).div(10).plus(2);
-	if (height.gte(2)) height = height.minus(5).times(20).pow(3/4).div(20).plus(5);
+	if (height.gte(2)) height = height.minus(2).times(10).pow(3/4).div(10).plus(2);
+	if (height.gte(5)) height = height.minus(5).times(20).pow(3/4).div(20).plus(5);
 	if (height.gte(game.rocket.heightMax)) height = game.rocket.heightMax;
 	return height;
 }
