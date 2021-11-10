@@ -61,8 +61,8 @@ function rocketLaunch() {
 //Getting the rocket's current height.
 function getHeight() {
 	var height = game.rocket.maxFuel.sub(game.rocket.fuel).times(game.rocket.speed);
-	if (height.gte(1)) height = height.minus(1).times(100).pow(1/1.5).div(100).plus(1);
-	if (height.gte(2)) height = height.minus(2).times(200).pow(1/1.5).div(200).plus(2);
+	if (height.gte(1)) height = height.minus(1).times(10).pow(3/4).div(10).plus(1);
+	if (height.gte(2)) height = height.minus(2).times(20).pow(3/4).div(20).plus(2);
 	if (height.gte(game.rocket.heightMax)) height = game.rocket.heightMax;
 	return height;
 }
@@ -157,7 +157,7 @@ function initExchangeRate() {
 }
 //Init Height Exponent
 function initMaxHeight() {
-	game.rocket.heightMax = Decimal.add(0.5, Decimal.mul(0.1, game.rocket.upgrade[3]));
+	game.rocket.heightMax = Decimal.add(0.5, Decimal.mul(0.1, Decimal.pow(game.rocket.upgrade[3],1.5)));
 }
 //Get the fuel consumption rate
 function getConsumption() {
