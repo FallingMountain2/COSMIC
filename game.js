@@ -145,7 +145,7 @@ function initSpeed() {
 	//Buffs
 	var upgradePow = new Decimal(1.12);
 	if (game.rocket.upgrade[1] > 50) {
-		upgradePow = upgradePow.plus(Decimal.mul(0.0005, game.rocket.upgrade[1]));
+		upgradePow = upgradePow.plus(Decimal.mul(0.0001, game.rocket.upgrade[1]));
 	}
 	game.rocket.speed = Decimal.add("1e-3", new Decimal("3e-4").times(game.rocket.upgrade[1]));
 	game.rocket.speed = game.rocket.speed.times(Decimal.pow(upgradePow, game.rocket.upgrade[1]));
