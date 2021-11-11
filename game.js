@@ -64,6 +64,7 @@ function getHeight() {
 	if (height.gte(2)) height = height.minus(2).times(10).pow(3/4).div(10).plus(2);
 	if (height.gte(5)) height = height.minus(5).times(20).pow(3/4).div(20).plus(5);
 	if (height.gte(12.5)) height = height.minus(12.5).times(30).pow(3/4).div(30).plus(12.5);
+	if (height.gte(31.25)) height = height.minus(31.25).times(40).pow(3/4).div(40).plus(31.25);
 	if (height.gte(game.rocket.heightMax)) height = game.rocket.heightMax;
 	return height;
 }
@@ -141,8 +142,12 @@ function initUpgrades() {
 //Initialize speed
 function initSpeed() {
 	//Buffs
+	var upgradePow = new Decimal(1.12);
+	if (game.rocket.upgrade[1] > 50) {
+		upgradePow = upgradePow.plus(Decimal.mul(0.001, game.rocket.upgrade[1]));
+	}
 	game.rocket.speed = Decimal.add("1e-3", new Decimal("3e-4").times(game.rocket.upgrade[1]));
-	game.rocket.speed = game.rocket.speed.times(Decimal.pow(1.12, game.rocket.upgrade[1]));
+	game.rocket.speed = game.rocket.speed.times(Decimal.pow(upgradePow, game.rocket.upgrade[1]));
 }
 //Init Fuel
 function initFuel() {
@@ -157,6 +162,7 @@ function initExchangeRate() {
 	if (getHeight().gte(2)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(2).times(50).pow(3).div(50));
 	if (getHeight().gte(5)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(5).times(100).pow(3.5).div(100));
 	if (getHeight().gte(12.5)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(12.5).times(150).pow(4).div(150));
+	if (getHeight().gte(31.25)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(31.25).times(200).pow(5).div(200));
 	if (game.rocket.maxFuel.gte(100)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(10);
 }
 //Init Height Exponent
