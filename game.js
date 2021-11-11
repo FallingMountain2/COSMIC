@@ -159,7 +159,7 @@ function initFuel() {
 function initExchangeRate() {
 	//Multipliers
 	var exchangeUpgradePow = new Decimal(1.3);
-	if (game.rocket.upgrade[0] > 100) exchangeUpgradePow = new Decimal(1.3).plus(Decimal.mul(0.0007, game.rocket.upgrade[0]));
+	if (game.rocket.upgrade[0] > 100) exchangeUpgradePow = new Decimal(1.3).plus(Decimal.mul(0.001, game.rocket.upgrade[0]));
 	game.rocket.exchangeRate = Decimal.add(250, Decimal.mul(75, game.rocket.upgrade[0]));
 	game.rocket.exchangeRate = game.rocket.exchangeRate.times(Decimal.pow(exchangeUpgradePow, game.rocket.upgrade[0]));
 	if (getHeight().gte(2)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(2).times(50).pow(3).div(50));
