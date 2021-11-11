@@ -118,7 +118,8 @@ function updateCostMults() {
 	game.rocket.costMult = [1.2, 1.1, 1.25, 1.35];
 	game.rocket.costMultInc = [0.025, 0.03, 0.1, 0.1];
 	game.rocket.coolDown = new Decimal(5).plus(game.rocket.upgrade[2]);
-	if (game.rocket.upgrade[2] == 15) game.rocket.costMultInc[2] = 0.2;
+	if (game.rocket.upgrade[2] >= 15) game.rocket.costMultInc[2] = 0.2;
+	if (game.rocket.upgrade[2] >= 35) game.rocket.costMultInc[2] = 0.3;
 }
 //Get the neta gain. Also the first time I use a while loop in a long time.
 function getNetaGain() {
@@ -164,6 +165,8 @@ function initExchangeRate() {
 	if (getHeight().gte(12.5)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(12.5).times(150).pow(4).div(150));
 	if (getHeight().gte(31.25)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(31.25).times(200).pow(5).div(200));
 	if (game.rocket.maxFuel.gte(100)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(10);
+	if (game.rocket.maxFuel.gte(200)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(10);
+	if (game.rocket.maxFuel.gte(300)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(10);
 }
 //Init Height Exponent
 function initMaxHeight() {
