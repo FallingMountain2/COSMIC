@@ -170,7 +170,9 @@ function initExchangeRate() {
 }
 //Init Height Exponent
 function initMaxHeight() {
-	game.rocket.heightMax = Decimal.add(0.5, Decimal.mul(0.1, Decimal.pow(game.rocket.upgrade[3],1.5)));
+	var maxHeightPow = new Decimal(1.5);
+	if (game.rocket.upgrade[3].gte(50)) maxHeightPow = new Decimal(1.75);
+	game.rocket.heightMax = Decimal.add(0.5, Decimal.mul(0.1, Decimal.pow(game.rocket.upgrade[3],maxHeightPow)));
 }
 //Get the fuel consumption rate
 function getConsumption() {
