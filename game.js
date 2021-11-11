@@ -161,7 +161,7 @@ function initExchangeRate() {
 	var exchangeUpgradePow = new Decimal(1.3);
 	if (game.rocket.upgrade[0] > 100) exchangeUpgradePow = new Decimal(1.3).plus(Decimal.mul(0.0007, game.rocket.upgrade[0]));
 	game.rocket.exchangeRate = Decimal.add(250, Decimal.mul(75, game.rocket.upgrade[0]));
-	game.rocket.exchangeRate = game.rocket.exchangeRate.times(Decimal.pow(1.3, game.rocket.upgrade[0]));
+	game.rocket.exchangeRate = game.rocket.exchangeRate.times(Decimal.pow(exchangeUpgradePow, game.rocket.upgrade[0]));
 	if (getHeight().gte(2)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(2).times(50).pow(3).div(50));
 	if (getHeight().gte(5)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(5).times(100).pow(3.5).div(100));
 	if (getHeight().gte(12.5)) game.rocket.exchangeRate = game.rocket.exchangeRate.times(getHeight().minus(12.5).times(150).pow(4).div(150));
